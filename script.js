@@ -1,4 +1,4 @@
-const apiKey = "664843b75302a2643f31ee9c81ced69b"; // Ganti dengan API key OpenWeatherMap kamu
+const apiKey = "664843b75302a2643f31ee9c81ced69b"; // Ganti dengan API key OpenWeatherMap
 
 const cityInput = document.getElementById("city");
 const searchBtn = document.getElementById("search-btn");
@@ -16,7 +16,7 @@ const loading = document.getElementById("loading");
 const errorDiv = document.getElementById("error");
 const datalist = document.getElementById("recent-searches");
 
-let unit = localStorage.getItem("unit") || "metric"; // metric or imperial
+let unit = localStorage.getItem("unit") || "metric";
 let theme = localStorage.getItem("theme") || "dark";
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 let recentSearches = JSON.parse(localStorage.getItem("recent")) || [];
@@ -24,50 +24,44 @@ let recentSearches = JSON.parse(localStorage.getItem("recent")) || [];
 init();
 
 function init() {
-  // Apply saved theme
   if (theme === "light") document.body.classList.add("light");
   themeToggle.checked = theme === "light";
-
-  // Apply saved unit
   unitToggle.checked = unit === "imperial";
 
   renderFavorites();
   renderRecentSearches();
 
-  // Event listeners
   searchBtn.addEventListener("click", () => getWeather(cityInput.value));
   favBtn.addEventListener("click", addFavorite);
   unitToggle.addEventListener("change", toggleUnit);
   themeToggle.addEventListener("change", toggleTheme);
 
-  // Try geolocation
+  cityInput.addEventListener("input", () => {
+    const input = cityInput.value.toLowerCase();
+    datalist.innerHTML = "";
+    recentSearches
+      .filter(city => city.toLowerCase().startsWith(input))
+      .forEach(city => {
+        const opt = document.createElement("option");
+        opt.value = city;
+        datalist.appendChild(opt);
+      });
+  });
+
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
-      pos => {
-        const { latitude, longitude } = pos.coords;
-        getWeatherByCoords(latitude, longitude);
-      },
-      () => {
-        if (recentSearches.length > 0) getWeather(recentSearches[0]);
-      }
+      pos => getWeatherByCoords(pos.coords.latitude, pos.coords.longitude),
+      () => { if (recentSearches.length) getWeather(recentSearches[0]); }
     );
   }
 }
 
-function showLoading(show) {
-  loading.classList.toggle("hidden", !show);
-}
-
-function showError(msg) {
-  errorDiv.textContent = msg;
-  errorDiv.classList.remove("hidden");
-  setTimeout(() => errorDiv.classList.add("hidden"), 3000);
-}
+function showLoading(show) { loading.classList.toggle("hidden", !show); }
+function showError(msg) { errorDiv.textContent = msg; errorDiv.classList.remove("hidden"); setTimeout(() => errorDiv.classList.add("hidden"), 3000); }
 
 function getWeather(city) {
   if (!city) return;
   showLoading(true);
-
   const currentUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${unit}`;
   const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=${unit}`;
 
@@ -88,7 +82,6 @@ function getWeatherByCoords(lat, lon) {
   showLoading(true);
   const currentUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=${unit}`;
   const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=${unit}`;
-
   Promise.all([fetch(currentUrl), fetch(forecastUrl)])
     .then(responses => Promise.all(responses.map(r => r.json())))
     .then(([current, forecast]) => {
@@ -143,7 +136,6 @@ function displayDaily(list) {
     if (!days[date]) days[date] = [];
     days[date].push(item.main.temp);
   });
-
   Object.keys(days).slice(0, 5).forEach(date => {
     const temps = days[date];
     const min = Math.round(Math.min(...temps));
@@ -167,11 +159,27 @@ function addFavorite() {
 
 function renderFavorites() {
   favoritesList.innerHTML = "";
-  favorites.forEach(city => {
+  favorites.forEach((city, index) => {
     const li = document.createElement("li");
-    li.textContent = city;
-    li.style.cursor = "pointer";
-    li.addEventListener("click", () => getWeather(city));
+
+    const citySpan = document.createElement("span");
+    citySpan.textContent = city;
+    citySpan.style.cursor = "pointer";
+    citySpan.addEventListener("click", () => getWeather(city));
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "🗑️";
+    deleteBtn.style.background = "transparent";
+    deleteBtn.style.border = "none";
+    deleteBtn.style.cursor = "pointer";
+    deleteBtn.addEventListener("click", () => {
+      favorites.splice(index, 1);
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+      renderFavorites();
+    });
+
+    li.appendChild(citySpan);
+    li.appendChild(deleteBtn);
     favoritesList.appendChild(li);
   });
 }
@@ -203,5 +211,5 @@ function toggleUnit() {
 function toggleTheme() {
   theme = themeToggle.checked ? "light" : "dark";
   localStorage.setItem("theme", theme);
-  document.body.classList.toggle("light");
+  document.body.classList.toggle("dark", theme === "dark");
 }
