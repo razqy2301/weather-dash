@@ -10,13 +10,11 @@
   <div id="app">
     <h2>🌤 Weather Dashboard</h2>
 
-    <!-- Search -->
     <input type="text" id="city" list="recent-searches" placeholder="Enter city..." />
     <datalist id="recent-searches"></datalist>
     <button id="search-btn">Search</button>
     <button id="fav-btn">⭐ Add to Favorites</button>
 
-    <!-- Toggles -->
     <div class="toggles">
       <label>
         <input type="checkbox" id="unit-toggle" />
@@ -28,11 +26,9 @@
       </label>
     </div>
 
-    <!-- Loading & Error -->
     <div id="loading" class="hidden">Loading...</div>
     <div id="error" class="hidden"></div>
 
-    <!-- Current Weather -->
     <div id="current-weather">
       <img id="weather-icon" alt="Weather Icon" />
       <div id="temp-div"></div>
@@ -42,7 +38,6 @@
     <h3>Today (3-hourly)</h3>
     <div id="hourly-forecast"></div>
 
-    <!-- 5-Day Forecast -->
     <h3>5-Day Forecast</h3>
     <div id="daily-forecast"></div>
 
