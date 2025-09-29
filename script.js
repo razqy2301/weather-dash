@@ -1,4 +1,4 @@
-const apiKey = "664843b75302a2643f31ee9c81ced69b"; 
+const apiKey = "664843b75302a2643f31ee9c81ced69b"; // Ganti dengan API key OpenWeatherMap kamu
 
 const cityInput = document.getElementById("city");
 const searchBtn = document.getElementById("search-btn");
