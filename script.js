@@ -1,4 +1,4 @@
-const apiKey = "664843b75302a2643f31ee9c81ced69b"; // ganti dengan API key dari OpenWeatherMap
+const apiKey = "664843b75302a2643f31ee9c81ced69b"; 
 
 document.getElementById("search-btn").addEventListener("click", getWeather);
 
@@ -40,7 +40,6 @@ function displayWeather(data) {
   const weatherIcon = document.getElementById("weather-icon");
   const hourlyForecastDiv = document.getElementById("hourly-forecast");
 
-  // Clear previous content
   weatherInfoDiv.innerHTML = "";
   hourlyForecastDiv.innerHTML = "";
   tempDivInfo.innerHTML = "";
@@ -49,7 +48,7 @@ function displayWeather(data) {
     weatherInfoDiv.innerHTML = `<p>${data.message}</p>`;
   } else {
     const cityName = data.name;
-    const temperature = Math.round(data.main.temp - 273.15); // Celsius
+    const temperature = Math.round(data.main.temp - 273.15); 
     const description = data.weather[0].description;
     const iconCode = data.weather[0].icon;
     const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
@@ -64,7 +63,7 @@ function displayWeather(data) {
 
 function displayHourlyForecast(hourlyData) {
   const hourlyForecastDiv = document.getElementById("hourly-forecast");
-  const next24Hours = hourlyData.slice(0, 8); // next 24 hours (3h interval)
+  const next24Hours = hourlyData.slice(0, 8);
 
   next24Hours.forEach((item) => {
     const dateTime = new Date(item.dt * 1000);
