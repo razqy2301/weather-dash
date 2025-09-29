@@ -1,105 +1,93 @@
-:root {
-  --bg:#C4E1E6;
-  --card:#A4CCD9;
-  --text:#1e619c;
-  --accent:#8DBCC7;
-}
-
 body {
-  background: var(--bg);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, Sans-Serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  transition: all 0.3s ease;
 }
 
-#weather-container {
-  background: rgba(255, 255, 255, 0.3);
-  max-width: 400px;
-  padding: 30px;
+/* warna dari root versi kedua */
+:root {
+  --bg: #C4E1E6;
+  --card: #A4CCD9;
+  --text: #EBFFD8;
+  --accent: #8DBCC7;
+}
+
+body.light {
+  --bg: #f4f4f4;
+  --card: #fff;
+  --text: #333;
+}
+
+#app {
+  background: var(--card);
+  padding: 20px;
   border-radius: 15px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 500px;
+  width: 100%;
   text-align: center;
 }
 
-#weather-container h2,
-#weather-container label,
-#weather-container p {
-  color: var(--text);
-  margin: 8px 0;
-}
-
-#weather-container input {
-  width: calc(100% - 16px);
+input, button {
+  margin-top: 10px;
   padding: 8px;
-  box-sizing: border-box;
-  border-radius: 10px;
-  border: 1px solid white;
-  margin-top: 20px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
-#weather-container button {
+button {
+  cursor: pointer;
   background: var(--accent);
   color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  margin-top: 20px;
-  width: 100px;
-  font-size: 15px;
 }
 
-#weather-container button:hover {
+button:hover {
   background: #1e619c;
 }
 
-#temp-div p {
-  font-size: 60px;
-  margin-top: -30px;
-}
-
-#weather-info {
-  font-size: 20px;
-}
-
 #weather-icon {
-  width: 200px;
-  height: 200px;
-  margin: 0 auto 10px;
-  margin-bottom: 0;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 15px auto; /* center + ada jarak ke bawah */
+  display: none;            /* default disembunyikan */
+}
+
+#temp-div p {
+  font-size: 48px;
+  margin: 10px 0;
+}
+
+#hourly-forecast, #daily-forecast {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.hourly-item, .daily-item {
+  flex: 0 0 auto;
+  background: var(--bg);
+  color: #fff;
+  padding: 8px;
+  border-radius: 10px;
+  min-width: 80px;
+}
+
+.daily-item {
+  cursor: pointer;
+}
+
+.hidden {
   display: none;
 }
 
-#hourly-forecast {
-  margin-top: 50px;
-  overflow-x: auto;
-  white-space: nowrap;
-  display: flex;
-  justify-content: space-between;
-}
-
-.hourly-item {
-  flex: 0 0 auto;
-  width: 80px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-right: 10px;
-  color: white;
-}
-
-.hourly-item img {
-  width: 30px;
-  height: 30px;
-  margin-bottom: 5px;
-}
-
-#hourly-heading {
-  color: #fff;
-  margin-top: 10px;
+.toggles {
+  margin: 10px 0;
 }
